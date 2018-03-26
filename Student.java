@@ -8,7 +8,7 @@ public class Student extends Person{
 	
 	Student(String firstname, String lastName, Address address, String phoneNumber, String emailAddress, String status){
 		// call the super class constructor to pass the Person data fields	
-		
+		super(firstname, lastName, address, phoneNumber, emailAddress);
 		this.status = status;
 	}
 	
@@ -16,7 +16,7 @@ public class Student extends Person{
 	@Override
 	public String toString() {
 
-		return null;
+		return firstname + " , "+ lastName + " , " + address.toString() + " , " + phoneNumber + " , " + emailAddress + " , " + status;
 	}
 
 }

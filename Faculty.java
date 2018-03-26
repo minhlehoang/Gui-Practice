@@ -9,7 +9,7 @@ public class Faculty extends Person{
 	
 	Faculty(String firstname, String lastName, Address address, String phoneNumber, String emailAddress, String rankOfFaculty, MyDate appointmentDate){
 		// call the super class constructor to pass the Person data fields	
-		
+		super(firstname, lastName, address, phoneNumber, emailAddress);
 		this.rankOfFaculty = rankOfFaculty; // values are Lecturer, Assistant Professor, Associate Professor, Professor
 		this.appointmentDate = appointmentDate;		
 	}
