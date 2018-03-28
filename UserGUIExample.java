@@ -28,12 +28,11 @@ public class UserGUIExample extends JPanel {
 	  private JTextArea textArea;
 	  private JComboBox combList;
 	  private JScrollPane jp;
-	  private TechStore techStore;
+	  //private TechStore techStore;
 	  private String fileName = "data.txt";
 	  
 	  public UserGUIExample() {
-		  
-		 techStore = new TechStore(fileName);
+		  //techStore = new TechStore(fileName);
 
 	    initGUI();
 	    doTheLayout();
