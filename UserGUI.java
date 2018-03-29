@@ -228,8 +228,8 @@ public class UserGUI extends JFrame implements ActionListener{
 			LocalDate today = LocalDate.now();
 			day_object = new MyDate(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
 			
-			String first_name_text = firstname_field.getText();
-			String last_name_text = lastname_field.getText();
+			String first_name_text = firstname_field.getText().trim().substring(0,1).toUpperCase() + firstname_field.getText().trim().substring(1);
+			String last_name_text = lastname_field.getText().trim().substring(0,1).toUpperCase() + lastname_field.getText().trim().substring(1);
 			String street_text = street_field.getText();
 			int housenumber_text = Integer.parseInt(housenumber_field.getText());
 			String city_text = city_field.getText();
@@ -270,13 +270,11 @@ public class UserGUI extends JFrame implements ActionListener{
 			JOptionPane.showMessageDialog(null, "Full");
 		}
 		}
-		
-	
 	
 	private void sortBnttonClicked() {
 		//Method to implement sort button action
-		JOptionPane.showMessageDialog(null, "sort button clicked");
-		
+		textarea.setText("sort button clicked");
+		textarea.append("\n");
 		selectionSort();
 	}
 	private void displaynttonClicked() throws FileNotFoundException{
@@ -314,12 +312,13 @@ public class UserGUI extends JFrame implements ActionListener{
 					personArray[i] = currentMin;
 				}
 			}
+			textarea.append("Your array has been sorted successfully.");
 		}
 		else if(Person.numberOfPersons == 1){
-			textarea.setText(personArray[0].toString());
+			textarea.append("There is only one record in the array. No need to sort.");
 		}
 		else {
-			textarea.setText("There is no record in your list. Please add more to sort.");
+			textarea.append("There is no record in your list. Please add more to sort.");
 		}
 		
 		
