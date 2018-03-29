@@ -22,4 +22,18 @@ public abstract class Person {
 	}
 	// This is an abstract method
 	public abstract String toString();
+	
+	
+	public int compareTo(Person per) {
+		int comparevalue = this.lastName.compareTo(per.lastName);
+		if(comparevalue > 0) {
+			return 1;
+		}
+		else if(comparevalue < 0) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
+	}
 }

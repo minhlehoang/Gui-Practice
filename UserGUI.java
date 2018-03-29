@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -275,19 +276,18 @@ public class UserGUI extends JFrame implements ActionListener{
 	private void sortBnttonClicked() {
 		//Method to implement sort button action
 		JOptionPane.showMessageDialog(null, "sort button clicked");
-		textarea.setText("Your area has been sorted.");
+		
 		selectionSort();
 	}
 	private void displaynttonClicked() throws FileNotFoundException{
 		// Method to implement display button action
 		// calls the selection sort to sort the personArray
 		// displays the array in the text area after sorting
-		String results = null;
-		textarea.setText("Here is the full list of the array: ");
-		textarea.append("\n");
+		String results = null;		
 		JOptionPane.showMessageDialog(null, "display button clicked");
-		if(Person.numberOfPersons > 0) {
-			
+		if(Person.numberOfPersons > 0) {	
+			textarea.setText("Here is the full list of the array: ");
+			textarea.append("\n");
 			for(int i = 0; i < Person.numberOfPersons; i++) {
 				results = personArray[i].toString();
 				textarea.append(results);
@@ -299,7 +299,31 @@ public class UserGUI extends JFrame implements ActionListener{
 		}
 	}
 	private void selectionSort() {
-		//Method to sort person objects based on last name
+		if(Person.numberOfPersons > 1) {
+			for(int i = 0; i <Person.numberOfPersons; i++) {
+				Person currentMin = personArray[i];
+				int currentMinIndex = i;
+				for(int j = i + 1; j < Person.numberOfPersons; j++) {
+					if(currentMin.compareTo(personArray[j]) > 0) {
+						currentMin = personArray[j];
+						currentMinIndex = j;
+					}
+				}
+				if(currentMinIndex != i) {
+					personArray[currentMinIndex] = personArray[i];
+					personArray[i] = currentMin;
+				}
+			}
+		}
+		else if(Person.numberOfPersons == 1){
+			textarea.setText(personArray[0].toString());
+		}
+		else {
+			textarea.setText("There is no record in your list. Please add more to sort.");
+		}
+		
+		
+		
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
