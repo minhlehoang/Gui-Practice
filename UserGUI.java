@@ -16,8 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-
+import javax.swing.ScrollPaneConstants;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -45,24 +44,33 @@ public class UserGUI extends JFrame implements ActionListener{
 	private JTextField phonenumber_field;
 	private JLabel email;
 	private JTextField email_field;
+	
 	private JRadioButton student_radio;
 	private JRadioButton faculty_radio;
 	private ButtonGroup student_or_faculty_button_group;
+	
 	private JComboBox student_combobox;
 	private JComboBox faculty_combobox;
+	
 	private String[] student_status_options = {"Please select one of these options", "Freshman", "Sophomore", "Junior", "Senior", "Graduate Student"};
 	private String[] faculty_rank_options = {"Please select one of these options", "Lecturer", "Assistant Professor", "Associate Professor", "Professor"};
+	
 	private JButton add_student_faculty;
 	private JButton sort_student_faculty;
 	private JButton display_student_faculty;
+	
 	private JTextArea textarea;
+	private JScrollPane jp;
+	
 	private JPanel main_panel;
 	private JPanel info_panel;
 	private JPanel student_or_faculty_panel;
 	private JPanel status_or_rank_panel;
-	private JPanel textarea_panel;
+	//private JPanel textarea_panel;
 	private JPanel some_buttons_panel;
+	
 	String student_status_text;
+	
 	// constructor
 	UserGUI(int nPersons){
 		// create person array of size nPersons
@@ -104,28 +112,38 @@ public class UserGUI extends JFrame implements ActionListener{
 		phonenumber_field = new JTextField();
 		email = new JLabel("Email");
 		email_field = new JTextField();
+		
 		student_radio = new JRadioButton("Student");
 		student_radio.setSelected(true);
 		faculty_radio = new JRadioButton("Faculty");
+		
 		student_or_faculty_button_group = new ButtonGroup();
 		student_or_faculty_button_group.add(student_radio);
-		student_or_faculty_button_group.add(faculty_radio);		
+		student_or_faculty_button_group.add(faculty_radio);	
+		
 		student_combobox = new JComboBox(student_status_options);
 		student_combobox.setVisible(true);		
 		faculty_combobox = new JComboBox(faculty_rank_options);
 		faculty_combobox.setVisible(false);
+		
 		textarea = new JTextArea(6,600);
 		textarea.setEditable(false);
 		textarea.setLineWrap(true);
 		textarea.setWrapStyleWord(true);
+		
+		jp = new JScrollPane(textarea);
+		jp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		jp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
 		add_student_faculty = new JButton("Add Student/Faculty");
 		sort_student_faculty = new JButton("Sort Student & Faculty");
 		display_student_faculty = new JButton("Display Student & Faculty");
+		
 		main_panel = new JPanel(new GridLayout(5, 1));
 		info_panel = new JPanel(new GridLayout(5, 4));
 		student_or_faculty_panel = new JPanel(new GridLayout(2, 1));
 		status_or_rank_panel = new JPanel(new GridLayout(1, 1));
-		textarea_panel = new JPanel(new FlowLayout());
+		//textarea_panel = new JPanel(new FlowLayout());
 		some_buttons_panel = new JPanel(new BorderLayout());
 	}
 	private void doTheLayout(){
@@ -149,18 +167,24 @@ public class UserGUI extends JFrame implements ActionListener{
 		info_panel.add(phonenumber_field);
 		info_panel.add(email);
 		info_panel.add(email_field);
+		
 		student_or_faculty_panel.add(student_radio);
 		student_or_faculty_panel.add(faculty_radio);
+		
 		status_or_rank_panel.add(student_combobox);
-		textarea_panel.add(textarea);
+		
+		//textarea_panel.add(textarea);
+		
 		some_buttons_panel.add(add_student_faculty, BorderLayout.WEST);
 		some_buttons_panel.add(sort_student_faculty, BorderLayout.CENTER);
 		some_buttons_panel.add(display_student_faculty, BorderLayout.EAST);
+		
 		main_panel.add(info_panel);
 		main_panel.add(student_or_faculty_panel);
 		main_panel.add(status_or_rank_panel);
-		main_panel.add(textarea_panel);
+		main_panel.add(jp);
 		main_panel.add(some_buttons_panel);
+		
 		add(main_panel);
 		}
 
@@ -197,63 +221,82 @@ public class UserGUI extends JFrame implements ActionListener{
 	}
 	
 	private void addButtonClicked(){
-		//Method to implement add button action
-		MyDate day_object;
-		LocalDate today = LocalDate.now();
-		int month = today.getMonthValue();
-		int year = today.getYear();
-		int day = today.getDayOfMonth();
-		day_object = new MyDate(year, month, day);
-		
-		JOptionPane.showMessageDialog(null, "add button clicked " + day);
-		String first_name_text = firstname_field.getText();
-		String last_name_text = lastname_field.getText();
-		String street_text = street_field.getText();
-		int housenumber_text = Integer.parseInt(housenumber_field.getText());
-		String city_text = city_field.getText();
-		String state_text = state_field.getText();
-		int zipcode_text = Integer.parseInt(zipcode_field.getText());
-		Address address =  new Address(street_text, housenumber_text, city_text, state_text, zipcode_text);
-		String phonenumber_text = phonenumber_field.getText();
-		String email_text = email_field.getText();
-		if(student_radio.isSelected()) {
-			student_status_text =  student_combobox.getSelectedItem().toString();			
-			JOptionPane.showMessageDialog(null, student_status_text);
-			if(student_combobox.getSelectedItem().toString() != "Please select one of these options") {
-				JOptionPane.showMessageDialog(null, student_status_text);
-				Person person = new Student(first_name_text, last_name_text, address, phonenumber_text, email_text, student_status_text);
-				JOptionPane.showConfirmDialog(null, person.numberOfPersons);
-				textarea.setText("the person has been added");
-				
-				//personArray[i] = person;
+		if(Person.numberOfPersons < personArray.length ) {
+			//Method to implement add button action
+			MyDate day_object;
+			LocalDate today = LocalDate.now();
+			day_object = new MyDate(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+			
+			String first_name_text = firstname_field.getText();
+			String last_name_text = lastname_field.getText();
+			String street_text = street_field.getText();
+			int housenumber_text = Integer.parseInt(housenumber_field.getText());
+			String city_text = city_field.getText();
+			String state_text = state_field.getText();
+			int zipcode_text = Integer.parseInt(zipcode_field.getText());
+			Address address =  new Address(street_text, housenumber_text, city_text, state_text, zipcode_text);
+			String phonenumber_text = phonenumber_field.getText();
+			String email_text = email_field.getText();
+			if(student_radio.isSelected()) {
+				student_status_text =  student_combobox.getSelectedItem().toString();			
+				if(student_combobox.getSelectedItem().toString() != "Please select one of these options") {
+					JOptionPane.showMessageDialog(null, student_status_text);
+					Person person = new Student(first_name_text, last_name_text, address, phonenumber_text, email_text, student_status_text);
+					JOptionPane.showConfirmDialog(null, Person.numberOfPersons);
+					textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
+					
+					personArray[Person.numberOfPersons - 1] = person;
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "do it again" );
+				}
 			}
-			else {
-				JOptionPane.showMessageDialog(null, "do it again");
+			else if(faculty_radio.isSelected()) {
+				String faculty_rank_text = faculty_combobox.getSelectedItem().toString();
+				JOptionPane.showMessageDialog(null, faculty_rank_text);
+				if(faculty_combobox.getSelectedItem().toString() != "Please select one of these options") {
+					Person person = new Faculty(first_name_text, last_name_text, address, phonenumber_text, email_text, faculty_rank_text, day_object);
+					JOptionPane.showConfirmDialog(null, Person.numberOfPersons);
+					textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
+					personArray[Person.numberOfPersons - 1] = person;
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "do it again");
+				}
 			}
 		}
-		else if(faculty_radio.isSelected()) {
-			String faculty_rank_text = faculty_combobox.getSelectedItem().toString();
-			JOptionPane.showMessageDialog(null, faculty_rank_text);
-			if(faculty_combobox.getSelectedItem().toString() != "Please select one of these options") {
-				Person person = new Faculty(first_name_text, last_name_text, address, phonenumber_text, email_text, faculty_rank_text, day_object);
-			}
-			else {
-				JOptionPane.showMessageDialog(null, "do it again");
-			}
+		else {
+			JOptionPane.showMessageDialog(null, "Full");
+		}
 		}
 		
-		
-		//JOptionPane.showMessageDialog(null, first_name_text + last_name_text + street_text + housenumber_text + city_text + state_text + zipcode_text);
-	}
+	
+	
 	private void sortBnttonClicked() {
 		//Method to implement sort button action
 		JOptionPane.showMessageDialog(null, "sort button clicked");
+		textarea.setText("Your area has been sorted.");
+		selectionSort();
 	}
 	private void displaynttonClicked() throws FileNotFoundException{
 		// Method to implement display button action
 		// calls the selection sort to sort the personArray
 		// displays the array in the text area after sorting
+		String results = null;
+		textarea.setText("Here is the full list of the array: ");
+		textarea.append("\n");
 		JOptionPane.showMessageDialog(null, "display button clicked");
+		if(Person.numberOfPersons > 0) {
+			
+			for(int i = 0; i < Person.numberOfPersons; i++) {
+				results = personArray[i].toString();
+				textarea.append(results);
+				textarea.append("\n");					
+			}
+		}
+		else {
+			textarea.setText("There is no person in your list.");
+		}
 	}
 	private void selectionSort() {
 		//Method to sort person objects based on last name
@@ -261,7 +304,7 @@ public class UserGUI extends JFrame implements ActionListener{
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		//declare variables
-		int numberOfPersons = 0;
+		int numberOfPersons = Integer.parseInt(JOptionPane.showInputDialog("How many person ?"));
 		//Input number of audiences.
 		//Create a new GUI
 		UserGUI frame = new UserGUI(numberOfPersons);

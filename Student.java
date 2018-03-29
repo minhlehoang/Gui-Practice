@@ -15,7 +15,6 @@ public class Student extends Person{
 	// Override the abstract method from Person
 	@Override
 	public String toString() {
-
 		return firstname + " , "+ lastName + " , " + address.toString() + " , " + phoneNumber + " , " + emailAddress + " , " + status;
 	}
 
