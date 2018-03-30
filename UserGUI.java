@@ -71,6 +71,7 @@ public class UserGUI extends JFrame implements ActionListener{
 	private JPanel some_buttons_panel;
 	
 	String student_status_text;
+	String faculty_rank_text;
 	
 	// constructor
 	UserGUI(int nPersons){
@@ -144,7 +145,6 @@ public class UserGUI extends JFrame implements ActionListener{
 		info_panel = new JPanel(new GridLayout(5, 4));
 		student_or_faculty_panel = new JPanel(new GridLayout(2, 1));
 		status_or_rank_panel = new JPanel(new GridLayout(1, 1));
-		//textarea_panel = new JPanel(new FlowLayout());
 		some_buttons_panel = new JPanel(new BorderLayout());
 	}
 	private void doTheLayout(){
@@ -173,8 +173,6 @@ public class UserGUI extends JFrame implements ActionListener{
 		student_or_faculty_panel.add(faculty_radio);
 		
 		status_or_rank_panel.add(student_combobox);
-		
-		//textarea_panel.add(textarea);
 		
 		some_buttons_panel.add(add_student_faculty, BorderLayout.WEST);
 		some_buttons_panel.add(sort_student_faculty, BorderLayout.CENTER);
@@ -222,54 +220,169 @@ public class UserGUI extends JFrame implements ActionListener{
 	}
 	
 	private void addButtonClicked(){
+		//Method to implement add button action
+		MyDate day_object;
+		LocalDate today = LocalDate.now();
+		day_object = new MyDate(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+		
+		String first_name_text = null;
+		String last_name_text = null;
+		String street_text = null;
+		int housenumber_text = 0;
+		String city_text = null;
+		String state_text = null;
+		int zipcode_text = 0;
+		Address address;
+		String phonenumber_text = null;
+		String email_text = null;
+		int option = JOptionPane.YES_OPTION;
+		String error_message = "********ERROR******** \n";
+		
 		if(Person.numberOfPersons < personArray.length ) {
-			//Method to implement add button action
-			MyDate day_object;
-			LocalDate today = LocalDate.now();
-			day_object = new MyDate(today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+			try {
+				first_name_text = firstname_field.getText().trim().substring(0,1).toUpperCase() + firstname_field.getText().trim().substring(1);
+				if(first_name_text.length() == 0) {
+					throw new Exception();
+				}
+			}
+			catch(Exception ex) {
+				error_message += "Please correct your first name. \n";
+				textarea.setText(error_message);
+				firstname_field.requestFocus();
+				
+			}
 			
-			String first_name_text = firstname_field.getText().trim().substring(0,1).toUpperCase() + firstname_field.getText().trim().substring(1);
-			String last_name_text = lastname_field.getText().trim().substring(0,1).toUpperCase() + lastname_field.getText().trim().substring(1);
-			String street_text = street_field.getText();
-			int housenumber_text = Integer.parseInt(housenumber_field.getText());
-			String city_text = city_field.getText();
-			String state_text = state_field.getText();
-			int zipcode_text = Integer.parseInt(zipcode_field.getText());
-			Address address =  new Address(street_text, housenumber_text, city_text, state_text, zipcode_text);
-			String phonenumber_text = phonenumber_field.getText();
-			String email_text = email_field.getText();
-			if(student_radio.isSelected()) {
-				student_status_text =  student_combobox.getSelectedItem().toString();			
-				if(student_combobox.getSelectedItem().toString() != "Please select one of these options") {
-					JOptionPane.showMessageDialog(null, student_status_text);
-					Person person = new Student(first_name_text, last_name_text, address, phonenumber_text, email_text, student_status_text);
-					JOptionPane.showConfirmDialog(null, Person.numberOfPersons);
-					textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
-					
-					personArray[Person.numberOfPersons - 1] = person;
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "do it again" );
+			try {
+				last_name_text = lastname_field.getText().trim().substring(0,1).toUpperCase() + lastname_field.getText().trim().substring(1);
+				if(last_name_text.length() == 0) {
+					throw new Exception();
 				}
 			}
-			else if(faculty_radio.isSelected()) {
-				String faculty_rank_text = faculty_combobox.getSelectedItem().toString();
-				JOptionPane.showMessageDialog(null, faculty_rank_text);
-				if(faculty_combobox.getSelectedItem().toString() != "Please select one of these options") {
-					Person person = new Faculty(first_name_text, last_name_text, address, phonenumber_text, email_text, faculty_rank_text, day_object);
-					JOptionPane.showConfirmDialog(null, Person.numberOfPersons);
-					textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
-					personArray[Person.numberOfPersons - 1] = person;
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "do it again");
+			catch(Exception ex) {
+				error_message += "Please correct your last name. \n";
+				textarea.setText(error_message);
+				lastname_field.requestFocus();
+				
+			}			
+			
+			try {
+				street_text = street_field.getText();
+				if(street_text.length() == 0) {
+					throw new Exception();
 				}
 			}
+			catch(Exception ex) {
+				error_message += "Please correct your street name. \n";
+				textarea.setText(error_message);
+				street_field.requestFocus();				
+			}
+			
+			try {
+				housenumber_text = Integer.parseInt(housenumber_field.getText());
+				if(housenumber_text < 0) {
+					throw new Exception();
+				}
+			}
+			catch(Exception ex) {
+				housenumber_field.setText("");
+				error_message += "Please correct your house number. \n";
+				textarea.setText(error_message);
+				housenumber_field.requestFocus();				
+			}
+			
+			try {
+				city_text = city_field.getText();
+				if(city_text.length() == 0) {
+					throw new Exception();
+				}
+			}
+			catch(Exception ex) {
+				error_message += "Please correct your city. \n";
+				textarea.setText(error_message);
+				city_field.requestFocus();
+			}
+			
+			try {
+				state_text = state_field.getText();
+				if(state_text.length() == 0) {
+					throw new Exception();
+				}
+			}
+			catch(Exception ex) {
+				error_message += "Please correct your state. \n";
+				textarea.setText(error_message);
+				state_field.requestFocus();	
+			}
+			
+			try {
+				zipcode_text = Integer.parseInt(zipcode_field.getText());
+				if(zipcode_text < 0) {
+					throw new Exception();
+				}
+			}
+			catch(Exception ex){
+				error_message += "Please correct your zipcode. \n";
+				textarea.setText(error_message);
+				zipcode_field.requestFocus();					
+			}
+			
+			try {
+				phonenumber_text = phonenumber_field.getText();
+				if(phonenumber_text.length() < 0) {
+					throw new Exception();
+				}
+			}
+			catch(Exception ex) {
+				error_message += "Please correct your phone number. \n";
+				textarea.setText(error_message);
+				phonenumber_field.requestFocus();
+			}
+			
+			try {
+				email_text = email_field.getText();
+				if(email_text.length() < 0) {
+					throw new Exception();
+				}
+			}
+			catch(Exception ex) {
+				error_message += "Please correct your email address. \n";
+				textarea.setText(error_message);
+				email_field.requestFocus();	
+			}
+			if(error_message == "") {
+				address =  new Address(street_text, housenumber_text, city_text, state_text, zipcode_text);
+				if(student_radio.isSelected()) {
+					student_status_text =  student_combobox.getSelectedItem().toString();			
+					if(student_combobox.getSelectedItem().toString() != "Please select one of these options") {
+						Person person = new Student(first_name_text, last_name_text, address, phonenumber_text, email_text, student_status_text);
+						textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
+						personArray[Person.numberOfPersons - 1] = person;
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "do it again");
+					}
+				}
+				else if(faculty_radio.isSelected()) {
+					faculty_rank_text = faculty_combobox.getSelectedItem().toString();
+					if(faculty_combobox.getSelectedItem().toString() != "Please select one of these options") {
+						Person person = new Faculty(first_name_text, last_name_text, address, phonenumber_text, email_text, faculty_rank_text, day_object);
+						textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
+						personArray[Person.numberOfPersons - 1] = person;
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "do it again");
+					}
+				}
+			}
+			else {
+				textarea.setText(error_message);
+			}
 		}
-		else {
-			JOptionPane.showMessageDialog(null, "Full");
+		
+		else{
+			textarea.setText("Full");
 		}
-		}
+	}
 	
 	private void sortBnttonClicked() {
 		//Method to implement sort button action
@@ -277,12 +390,12 @@ public class UserGUI extends JFrame implements ActionListener{
 		textarea.append("\n");
 		selectionSort();
 	}
+	
 	private void displaynttonClicked() throws FileNotFoundException{
 		// Method to implement display button action
 		// calls the selection sort to sort the personArray
 		// displays the array in the text area after sorting
-		String results = null;		
-		JOptionPane.showMessageDialog(null, "display button clicked");
+		String results = null;
 		if(Person.numberOfPersons > 0) {	
 			textarea.setText("Here is the full list of the array: ");
 			textarea.append("\n");
@@ -296,6 +409,7 @@ public class UserGUI extends JFrame implements ActionListener{
 			textarea.setText("There is no person in your list.");
 		}
 	}
+	
 	private void selectionSort() {
 		if(Person.numberOfPersons > 1) {
 			for(int i = 0; i <Person.numberOfPersons; i++) {
@@ -320,15 +434,33 @@ public class UserGUI extends JFrame implements ActionListener{
 		else {
 			textarea.append("There is no record in your list. Please add more to sort.");
 		}
-		
-		
-		
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		//declare variables
-		int numberOfPersons = Integer.parseInt(JOptionPane.showInputDialog("How many person ?"));
-		//Input number of audiences.
+		int numberOfPersons = 0;
+		int option = JOptionPane.YES_OPTION;
+		while(option == JOptionPane.YES_OPTION) {
+			try {
+				numberOfPersons = Integer.parseInt(JOptionPane.showInputDialog("How many person ?"));
+				//Input number of audiences.				
+				if(numberOfPersons < 0) {
+					throw new Exception();
+				}
+				else if(numberOfPersons == 0) {
+					JOptionPane.showMessageDialog(null, "Exit program");
+					System.exit(0);
+				}
+				option = 1;
+			}
+			catch(Exception ex){
+				option = JOptionPane.showConfirmDialog(null, "Invalid input! Would you like to try again?");
+				if(option != JOptionPane.YES_OPTION) {
+					JOptionPane.showMessageDialog(null, "Exit program");
+					System.exit(0);
+				}
+			}
+		}
 		//Create a new GUI
 		UserGUI frame = new UserGUI(numberOfPersons);
 		//Set GUI frame settings
