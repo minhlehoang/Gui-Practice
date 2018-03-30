@@ -247,7 +247,6 @@ public class UserGUI extends JFrame implements ActionListener{
 			}
 			catch(Exception ex) {
 				error_message += "Please correct your first name. \n";
-				textarea.setText(error_message);
 				firstname_field.requestFocus();
 				
 			}
@@ -260,9 +259,7 @@ public class UserGUI extends JFrame implements ActionListener{
 			}
 			catch(Exception ex) {
 				error_message += "Please correct your last name. \n";
-				textarea.setText(error_message);
 				lastname_field.requestFocus();
-				
 			}			
 			
 			try {
@@ -273,7 +270,6 @@ public class UserGUI extends JFrame implements ActionListener{
 			}
 			catch(Exception ex) {
 				error_message += "Please correct your street name. \n";
-				textarea.setText(error_message);
 				street_field.requestFocus();				
 			}
 			
@@ -286,7 +282,6 @@ public class UserGUI extends JFrame implements ActionListener{
 			catch(Exception ex) {
 				housenumber_field.setText("");
 				error_message += "Please correct your house number. \n";
-				textarea.setText(error_message);
 				housenumber_field.requestFocus();				
 			}
 			
@@ -298,7 +293,6 @@ public class UserGUI extends JFrame implements ActionListener{
 			}
 			catch(Exception ex) {
 				error_message += "Please correct your city. \n";
-				textarea.setText(error_message);
 				city_field.requestFocus();
 			}
 			
@@ -310,7 +304,6 @@ public class UserGUI extends JFrame implements ActionListener{
 			}
 			catch(Exception ex) {
 				error_message += "Please correct your state. \n";
-				textarea.setText(error_message);
 				state_field.requestFocus();	
 			}
 			
@@ -322,65 +315,99 @@ public class UserGUI extends JFrame implements ActionListener{
 			}
 			catch(Exception ex){
 				error_message += "Please correct your zipcode. \n";
-				textarea.setText(error_message);
 				zipcode_field.requestFocus();					
 			}
 			
 			try {
 				phonenumber_text = phonenumber_field.getText();
-				if(phonenumber_text.length() < 0) {
+				if(phonenumber_text.length() == 0) {
 					throw new Exception();
 				}
 			}
 			catch(Exception ex) {
 				error_message += "Please correct your phone number. \n";
-				textarea.setText(error_message);
 				phonenumber_field.requestFocus();
 			}
 			
 			try {
 				email_text = email_field.getText();
-				if(email_text.length() < 0) {
+				if(email_text.length() == 0) {
 					throw new Exception();
 				}
 			}
 			catch(Exception ex) {
 				error_message += "Please correct your email address. \n";
-				textarea.setText(error_message);
 				email_field.requestFocus();	
 			}
-			if(error_message == "") {
+			if(error_message == "********ERROR******** \n") {
 				address =  new Address(street_text, housenumber_text, city_text, state_text, zipcode_text);
 				if(student_radio.isSelected()) {
-					student_status_text =  student_combobox.getSelectedItem().toString();			
-					if(student_combobox.getSelectedItem().toString() != "Please select one of these options") {
-						Person person = new Student(first_name_text, last_name_text, address, phonenumber_text, email_text, student_status_text);
-						textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
-						personArray[Person.numberOfPersons - 1] = person;
+					try {
+						student_status_text =  student_combobox.getSelectedItem().toString();	
+						if(student_combobox.getSelectedItem().toString() != "Please select one of these options") {
+							Person person = new Student(first_name_text, last_name_text, address, phonenumber_text, email_text, student_status_text);
+							JOptionPane.showMessageDialog(null, "The person has been added to the array. Here is the information: " + "\n" + person.toString());
+							textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
+							personArray[Person.numberOfPersons - 1] = person;
+							firstname_field.setText("");
+							lastname_field.setText("");
+							street_field.setText("");
+							housenumber_field.setText("");
+							city_field.setText("");
+							state_field.setText("");
+							zipcode_field.setText("");
+							phonenumber_field.setText("");
+							email_field.setText("");
+						}
+						else {
+							throw new Exception();
+						}
 					}
-					else {
-						JOptionPane.showMessageDialog(null, "do it again");
+					catch(Exception ex){
+						error_message += "You have not selected your student status yet. Please do it again. \n";
+						JOptionPane.showMessageDialog(null, error_message);
+						textarea.setText(error_message);
 					}
 				}
 				else if(faculty_radio.isSelected()) {
-					faculty_rank_text = faculty_combobox.getSelectedItem().toString();
-					if(faculty_combobox.getSelectedItem().toString() != "Please select one of these options") {
-						Person person = new Faculty(first_name_text, last_name_text, address, phonenumber_text, email_text, faculty_rank_text, day_object);
-						textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
-						personArray[Person.numberOfPersons - 1] = person;
+					try {
+						faculty_rank_text = faculty_combobox.getSelectedItem().toString();
+						if(faculty_combobox.getSelectedItem().toString() != "Please select one of these options") {
+							Person person = new Faculty(first_name_text, last_name_text, address, phonenumber_text, email_text, faculty_rank_text, day_object);
+							JOptionPane.showMessageDialog(null, "The person has been added to the array. Here is the information: " + "\n" + person.toString());
+							textarea.setText("The person has been added to the array. Here is the information: " + "\n" + person.toString());
+							personArray[Person.numberOfPersons - 1] = person;
+							firstname_field.setText("");
+							lastname_field.setText("");
+							street_field.setText("");
+							housenumber_field.setText("");
+							city_field.setText("");
+							state_field.setText("");
+							zipcode_field.setText("");
+							phonenumber_field.setText("");
+							email_field.setText("");
+						}
+						else{
+							throw new Exception();
+						}
 					}
-					else{
-						JOptionPane.showMessageDialog(null, "do it again");
+					catch(Exception ex){
+						error_message += "You have not selected your rank yet. Please do it again. \n";
+						JOptionPane.showMessageDialog(null, error_message);
+						textarea.setText(error_message);
 					}
+					
 				}
 			}
 			else {
+				JOptionPane.showMessageDialog(null, error_message);
 				textarea.setText(error_message);
 			}
 		}
 		
 		else{
-			textarea.setText("Full");
+			JOptionPane.showMessageDialog(null, "Your array is already full.");
+			textarea.setText("Your array is already full.");
 		}
 	}
 	
