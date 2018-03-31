@@ -91,9 +91,8 @@ public class UserGUI extends JFrame implements ActionListener{
 		display_student_faculty.addActionListener(this);
 		student_radio.addActionListener(this);
 		faculty_radio.addActionListener(this);
-		
-		
 	}//End of constructor
+	
 	private void initComponenet(){
 		// initialize all user interface components
 		firstname = new JLabel("First Name");
